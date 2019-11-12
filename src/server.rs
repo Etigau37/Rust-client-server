@@ -9,8 +9,8 @@ fn handle_connection(mut stream: TcpStream) {
     println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
 }
 
-fn main() -> Result<()> {
-    let listener = TcpListener::bind("127.0.0.1:80")?;
+pub fn create_listener(addr: String) -> Result<()> {
+    let listener = TcpListener::bind(addr)?;
     for stream in listener.incoming() {
         let stream = stream.unwrap();
         handle_connection(stream);
