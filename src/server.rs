@@ -1,15 +1,19 @@
-use std::net::{TcpListener, TcpStream};
+use std::io::prelude::*;
+use std::io::Result;
+use std::net::TcpListener;
+use std::net::TcpStream;
 
-fn handle_client(stream: TcpStream) {
-    // ...
+fn handle_connection(mut stream: TcpStream) {
+    let mut buffer = [0; 512];
+    stream.read(&mut buffer).unwrap();
+    println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
 }
 
-fn main() -> io::Result<()> {
+fn main() -> Result<()> {
     let listener = TcpListener::bind("127.0.0.1:80")?;
-
-    // accept connections and process them serially
     for stream in listener.incoming() {
-        handle_client(stream?);
+        let stream = stream.unwrap();
+        handle_connection(stream);
     }
     Ok(())
 }
